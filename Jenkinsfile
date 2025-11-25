@@ -63,4 +63,5 @@ pipeline {
             echo "Pipeline completed successfully! Access your app at port 8085"
         }
     }
+  }
 }
