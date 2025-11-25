@@ -2,54 +2,58 @@ pipeline {
     agent any
 
     stages {
-        stage('Checkout') {
-            steps {
-                git branch: 'main',
-                    url: 'https://github.com/Karun-Kumar-Undrajavarapu/Java-Application.git'
-            }
-        }
-
-        stage('Setup Java & Maven') {
-            steps {
-                // Use any available JDK 17+ and Maven 3.8+
-                tool name: 'JDK', type: 'jdk'
-                tool name: 'Maven', type: 'maven'
-            }
-        }
-
-        stage('Build') {
-            steps {
-                sh 'mvn -DskipTests clean package'
-            }
-        }
-
-        stage('Run Application') {
-            steps {
-                // Kill any old instance
-                sh 'pkill -f user-management-app.war || true'
-                // Run on port 8085
-                sh 'nohup java -jar target/user-management-app.war --server.port=8085 > app.log 2>&1 &'
-                echo "Waiting for app to start..."
-                sleep 20
-            }
-        }
-
-        stage('Health Check') {
+        stage('Build & Run Application') {
             steps {
                 sh '''
-                    curl --fail -s http://localhost:8085 || (echo "App failed to start!" && cat app.log && exit 1)
+                    # Clean workspace
+                    rm -rf Java-Application
+                    rm -f user-management-app.war
+
+                    # Clone your repo
+                    git clone https://github.com/Karun-Kumar-Undrajavarapu/Java-Application.git
+                    cd Java-Application
+
+                    # Download exact tools (no Jenkins config needed)
+                    echo "Downloading Maven 3.9.9..."
+                    wget -q https://archive.apache.org/dist/maven/maven-3/3.9.9/binaries/apache-maven-3.9.9-bin.tar.gz
+                    tar -xzf apache-maven-3.9.9-bin.tar.gz
+                    export PATH=$(pwd)/apache-maven-3.9.9/bin:$PATH
+
+                    echo "Downloading OpenJDK 17..."
+                    wget -q https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.12%2B7/OpenJDK17U-jdk_x64_linux_hotspot_17.0.12_7.tar.gz
+                    tar -xzf OpenJDK17U-jdk_x64_linux_hotspot_17.0.12_7.tar.gz
+                    export JAVA_HOME=$(pwd)/jdk-17.0.12+7
+                    export PATH=$JAVA_HOME/bin:$PATH
+
+                    # Verify versions
+                    java -version
+                    mvn -version
+
+                    # Build
+                    mvn -DskipTests clean package
+
+                    # Stop any old instance
+                    pkill -f user-management-app.war || true
+
+                    # Run on port 8085
+                    nohup java -jar target/user-management-app.war --server.port=8085 > app.log 2>&1 &
+                    echo "Starting application on port 8085..."
+                    sleep 25
+
+                    # Health check
+                    curl --fail http://localhost:8085 || (echo "App failed!" && cat app.log && exit 1)
+                    echo "SUCCESS! Your 3-Tier App is LIVE at http://$(hostname -I | awk '{print $1}'):8085"
                 '''
-                echo "YOUR 3-TIER APP IS LIVE AT: http://YOUR-JENKINS-IP:8085"
             }
         }
     }
 
     post {
         success {
-            echo "Pipeline succeeded! App running on port 8085"
+            echo "Pipeline SUCCESS! App running at port 8085"
         }
         failure {
-            archiveArtifacts artifacts: 'app.log', allowEmptyArchive: true
+            sh 'cat Java-Application/app.log || true'
         }
     }
 }
