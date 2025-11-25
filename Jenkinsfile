@@ -38,28 +38,6 @@ pipeline {
             }
         }
 
-        stage('Health Check') {
-            steps {
-                sh '''
-                    echo "Checking if app is responding..."
-                    if curl -f http://localhost:8085 >/dev/null 2>&1; then
-                        echo "SUCCESS! YOUR APP IS LIVE AND RUNNING!"
-                        echo "Access it here: http://$(hostname -I | awk '{print $1}'):8085"
-                    else
-                        echo "App not responding yet. Final check..."
-                        sleep 10
-                        curl -f http://localhost:8085 || (
-                            echo "APP FAILED TO START PROPERLY"
-                            echo "=== LAST 50 LINES OF LOG ==="
-                            tail -50 app.log
-                            exit 1
-                        )
-                    fi
-                '''
-            }
-        }
-    }
-
     post {
         always {
             archiveArtifacts artifacts: 'app.log', allowEmptyArchive: true
