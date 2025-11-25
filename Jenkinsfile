@@ -23,7 +23,7 @@ pipeline {
         stage('Deploy & Run') {
             steps {
                 sh '''
-                    # Stop any old instance
+                    # Stop any previous instance
                     pkill -f user-management-app.war || true
                     
                     # Start the app on port 8085
@@ -31,8 +31,9 @@ pipeline {
                                --server.port=8085 \
                                > app.log 2>&1 &
                     
-                    echo "Waiting for application to boot (30 seconds)..."
-                    sleep 30
+                    echo "Starting your 3-Tier Spring Boot app..."
+                    echo "Waiting 45 seconds for full JSP initialization..."
+                    sleep 45
                 '''
             }
         }
@@ -40,28 +41,35 @@ pipeline {
         stage('Health Check') {
             steps {
                 sh '''
-                    echo "Giving Spring Boot + JSP a few more seconds to finish loading..."
-                    sleep 40   # This is the ONLY change needed
-                    
+                    echo "Checking if app is responding..."
                     if curl -f http://localhost:8085 >/dev/null 2>&1; then
-                        echo "SUCCESS! YOUR 3-TIER APP IS 100% LIVE!"
-                        echo "Open in browser: http://$(hostname -I | awk '{print $1}'):8085"
+                        echo "SUCCESS! YOUR APP IS LIVE AND RUNNING!"
+                        echo "Access it here: http://$(hostname -I | awk '{print $1}'):8085"
                     else
-                        echo "Still starting... one more try in 10s"
+                        echo "App not responding yet. Final check..."
                         sleep 10
-                        curl -f http://localhost:8085 || (echo "Final failure" && cat app.log && exit 1)
+                        curl -f http://localhost:8085 || (
+                            echo "APP FAILED TO START PROPERLY"
+                            echo "=== LAST 50 LINES OF LOG ==="
+                            tail -50 app.log
+                            exit 1
+                        )
                     fi
                 '''
             }
         }
+    }
 
     post {
         always {
             archiveArtifacts artifacts: 'app.log', allowEmptyArchive: true
+            echo "Check the archived 'app.log' for full startup details if needed"
         }
         success {
-            echo "Pipeline completed successfully! Access your app at port 8085"
+            echo "CONGRATULATIONS! Your 3-Tier Java App is DEPLOYED & RUNNING on port 8085"
+        }
+        failure {
+            echo "Pipeline failed — check app.log above"
         }
     }
-  }
 }
