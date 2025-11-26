@@ -29,20 +29,20 @@
     </dependencyManagement>
 
     <dependencies>
-        <!-- Spring Boot Web Starter -->
+        <!-- Core Web -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
-        <!-- JSP Support -->
+        <!-- Essential for JSP in Spring Boot 3 WAR -->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-tomcat</artifactId>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-jasper</artifactId>
             <scope>provided</scope>
         </dependency>
 
-        <!-- JSTL for JSP -->
+        <!-- JSTL -->
         <dependency>
             <groupId>jakarta.servlet.jsp.jstl</groupId>
             <artifactId>jakarta.servlet.jsp.jstl-api</artifactId>
@@ -56,7 +56,7 @@
     <build>
         <finalName>user-management-app</finalName>
         <plugins>
-            <!-- Spring Boot Maven Plugin -->
+            <!-- Spring Boot Repackager (makes WAR executable) -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
@@ -64,9 +64,16 @@
                 <configuration>
                     <mainClass>com.example.UserManagementApplication</mainClass>
                 </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
-            
-            <!-- Maven Compiler Plugin (forces Java 17) -->
+
+            <!-- Compiler -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -76,30 +83,12 @@
                     <target>17</target>
                 </configuration>
             </plugin>
-            
-            <!-- Maven WAR Plugin (latest version - fixes the API incompatibility) -->
+
+            <!-- WAR Plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
                 <version>3.4.0</version>
-	    </plugin>
-
-	    <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>${spring-boot.version}</version>
-                <configuration>
-                    <mainClass>com.example.UserManagementApplication</mainClass>
-                    <!-- This line forces it to create an executable WAR/JAR -->
-                    <executable>true</executable>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>repackage</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>
