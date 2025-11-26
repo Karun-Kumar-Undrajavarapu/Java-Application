@@ -35,11 +35,11 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
-        <!-- Essential for JSP in Spring Boot 3 WAR -->
+        <!-- CRITICAL: tomcat-embed-jasper with COMPILE scope for executable WAR + JSP -->
         <dependency>
             <groupId>org.apache.tomcat.embed</groupId>
             <artifactId>tomcat-embed-jasper</artifactId>
-            <scope>provided</scope>
+            <scope>compile</scope>
         </dependency>
 
         <!-- JSTL -->
@@ -51,18 +51,26 @@
             <groupId>org.glassfish.web</groupId>
             <artifactId>jakarta.servlet.jsp.jstl</artifactId>
         </dependency>
+
+        <!-- For WAR deployability to external Tomcat (optional, but good) -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
     <build>
         <finalName>user-management-app</finalName>
         <plugins>
-            <!-- Spring Boot Repackager (makes WAR executable) -->
+            <!-- Spring Boot Plugin (single instance, no duplicate) -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>${spring-boot.version}</version>
                 <configuration>
                     <mainClass>com.example.UserManagementApplication</mainClass>
+                    <executable>true</executable>
                 </configuration>
                 <executions>
                     <execution>
