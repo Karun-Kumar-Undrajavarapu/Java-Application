@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
-<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
     <title>3-Tier User Management</title>
@@ -16,8 +16,13 @@
         a:hover { text-decoration: underline; }
     </style>
 </head>
+
 <body>
     <h1>User Management - 3 Tier App</h1>
+
+    <c:if test="${not empty error}">
+        <div style="color: red; margin-bottom: 12px;">${error}</div>
+    </c:if>
 
     <form action="/add" method="post">
         <input type="text" name="name" placeholder="Enter name" required />

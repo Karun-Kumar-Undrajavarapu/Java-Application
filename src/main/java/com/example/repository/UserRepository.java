@@ -4,11 +4,12 @@ import com.example.model.User;
 import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicLong;
 
 @Repository
 public class UserRepository {
-    private final List<User> users = new ArrayList<>();
+    private final List<User> users = new CopyOnWriteArrayList<>();
     private final AtomicLong counter = new AtomicLong();
 
     public List<User> findAll() {
@@ -23,6 +24,7 @@ public class UserRepository {
         users.add(user);
         return user;
     }
+    
 
     public void deleteById(Long id) {
         users.removeIf(u -> u.getId().equals(id));
