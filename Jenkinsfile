@@ -167,10 +167,8 @@ pipeline {
         }
         
         always {
-            echo "Pipeline execution completed at $(date)"
-            
-            // Show running process info
             sh '''
+                echo "Pipeline execution completed at $(date)"
                 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
                 echo "Running Java Processes:"
                 ps aux | grep java | grep -v grep || echo "No Java processes found"
