@@ -17,44 +17,44 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                echo "📦 Checking out code from GitHub..."
+                echo " Checking out code from GitHub..."
                 git branch: 'main',
                     url: 'https://github.com/Karun-Kumar-Undrajavarapu/Java-Application.git'
-                echo "✅ Code checked out successfully"
+                echo " Code checked out successfully"
             }
         }
 
         stage('Build') {
             steps {
-                echo "🔨 Building application with Maven..."
+                echo " Building application with Maven..."
                 sh 'mvn clean package -DskipTests'
-                echo "✅ Build completed successfully"
-                echo "📦 Artifact: target/${APP_NAME}.war"
+                echo " Build completed successfully"
+                echo " Artifact: target/${APP_NAME}.war"
             }
         }
 
         stage('Test') {
             steps {
-                echo "🧪 Running unit tests..."
+                echo " Running unit tests..."
                 sh 'mvn test'
-                echo "✅ All tests passed"
+                echo " All tests passed"
             }
         }
 
         stage('Stop Previous Instance') {
             steps {
-                echo "⏹️  Stopping previous application instances..."
+                echo "  Stopping previous application instances..."
                 sh '''
                     pkill -f "${APP_NAME}.war" || true
                     sleep 2
-                    echo "✅ Previous instance stopped"
+                    echo " Previous instance stopped"
                 '''
             }
         }
 
         stage('Deploy') {
             steps {
-                echo "🚀 Deploying application to port ${APP_PORT}..."
+                echo "Deploying application to port ${APP_PORT}..."
                 sh '''
                     # Create logs directory
                     mkdir -p logs
@@ -72,22 +72,22 @@ pipeline {
 
         stage('Health Check') {
             steps {
-                echo "🏥 Performing health check..."
+                echo " Performing health check..."
                 sh '''
                     # Check if app is listening on the port
                     for i in {1..10}; do
                         if curl -f http://localhost:${APP_PORT}/login > /dev/null 2>&1; then
-                            echo "✅ Application is healthy and responding"
+                            echo " Application is healthy and responding"
                             curl -s http://localhost:${APP_PORT}/login | grep -q "login" && \
-                            echo "✅ Login page loaded successfully" || \
-                            echo "⚠️ Login page might have issues"
+                            echo " Login page loaded successfully" || \
+                            echo " Login page might have issues"
                             exit 0
                         fi
                         echo "Attempt $i/10: Waiting for application to start..."
                         sleep 1
                     done
                     
-                    echo "❌ Application health check failed"
+                    echo " Application health check failed"
                     exit 1
                 '''
             }
@@ -95,19 +95,19 @@ pipeline {
 
         stage('Verify Database') {
             steps {
-                echo "🗄️  Verifying database initialization..."
+                echo " Verifying database initialization..."
                 sh '''
                     sleep 3
                     if tail -20 ${APP_LOG} | grep -q "H2 console available"; then
-                        echo "✅ H2 Database initialized successfully"
+                        echo " H2 Database initialized successfully"
                     fi
                     
                     if tail -20 ${APP_LOG} | grep -q "Default Admin created"; then
-                        echo "✅ Default admin account created"
+                        echo " Default admin account created"
                     fi
                     
                     if tail -20 ${APP_LOG} | grep -q "Default User created"; then
-                        echo "✅ Default user account created"
+                        echo " Default user account created"
                     fi
                 '''
             }
@@ -117,11 +117,11 @@ pipeline {
     post {
         success {
             echo """
-            ✅ PIPELINE SUCCESSFUL
+            PIPELINE SUCCESSFUL
             ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-            🎉 Application successfully deployed!
+             Application successfully deployed!
             
-            📊 Details:
+             Details:
                ├─ App Name: ${APP_NAME}
                ├─ Port: ${APP_PORT}
                ├─ URL: http://localhost:${APP_PORT}
@@ -129,7 +129,7 @@ pipeline {
                ├─ Admin Dashboard: http://localhost:${APP_PORT}/admin/dashboard
                └─ Logs: ${APP_LOG}
             
-            👤 Test Credentials:
+            Test Credentials:
                ├─ Admin: admin@localhost.com / admin123
                └─ User: user@localhost.com / user123
             """
@@ -141,24 +141,24 @@ pipeline {
         
         failure {
             echo """
-            ❌ PIPELINE FAILED
+            PIPELINE FAILED
             ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
             Please check the following:
             
-            1️⃣  Check Build Logs:
+            Check Build Logs:
                tail -100 ${APP_LOG}
             
-            2️⃣  Check Maven Build:
+            Check Maven Build:
                mvn clean package
             
-            3️⃣  Verify Java & Maven Installation:
+            Verify Java & Maven Installation:
                java -version
                mvn -version
             
-            4️⃣  Check Port Availability:
+            Check Port Availability:
                lsof -i :${APP_PORT}
             
-            5️⃣  View Full Application Log:
+            View Full Application Log:
                cat ${APP_LOG}
             """
             
