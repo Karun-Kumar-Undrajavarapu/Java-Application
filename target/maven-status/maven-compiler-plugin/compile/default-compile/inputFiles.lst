@@ -1,4 +1,5 @@
 /home/neogeo/Java-Application/src/main/java/com/example/UserManagementApplication.java
+/home/neogeo/Java-Application/src/main/java/com/example/config/DataInitializer.java
 /home/neogeo/Java-Application/src/main/java/com/example/config/SecurityConfig.java
 /home/neogeo/Java-Application/src/main/java/com/example/controller/AdminController.java
 /home/neogeo/Java-Application/src/main/java/com/example/controller/AuthController.java
