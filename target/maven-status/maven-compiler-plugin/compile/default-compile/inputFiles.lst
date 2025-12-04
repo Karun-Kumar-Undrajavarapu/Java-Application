@@ -1,6 +1,10 @@
 /home/neogeo/Java-Application/src/main/java/com/example/UserManagementApplication.java
+/home/neogeo/Java-Application/src/main/java/com/example/config/SecurityConfig.java
+/home/neogeo/Java-Application/src/main/java/com/example/controller/AdminController.java
+/home/neogeo/Java-Application/src/main/java/com/example/controller/AuthController.java
 /home/neogeo/Java-Application/src/main/java/com/example/controller/GlobalExceptionHandler.java
 /home/neogeo/Java-Application/src/main/java/com/example/controller/UserController.java
+/home/neogeo/Java-Application/src/main/java/com/example/controller/UserProfileController.java
 /home/neogeo/Java-Application/src/main/java/com/example/model/User.java
 /home/neogeo/Java-Application/src/main/java/com/example/repository/UserRepository.java
 /home/neogeo/Java-Application/src/main/java/com/example/service/UserService.java

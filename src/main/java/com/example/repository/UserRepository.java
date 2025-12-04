@@ -1,32 +1,12 @@
 package com.example.repository;
 
 import com.example.model.User;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.atomic.AtomicLong;
+
+import java.util.Optional;
 
 @Repository
-public class UserRepository {
-    private final List<User> users = new CopyOnWriteArrayList<>();
-    private final AtomicLong counter = new AtomicLong();
-
-    public List<User> findAll() {
-        return new ArrayList<>(users);
-    }
-
-    public User save(User user) {
-        if (user.getId() == null) {
-            user.setId(counter.incrementAndGet());
-        }
-        users.removeIf(u -> u.getId().equals(user.getId()));
-        users.add(user);
-        return user;
-    }
-    
-
-    public void deleteById(Long id) {
-        users.removeIf(u -> u.getId().equals(id));
-    }
+public interface UserRepository extends JpaRepository<User, Long> {
+    Optional<User> findByEmail(String email);
 }

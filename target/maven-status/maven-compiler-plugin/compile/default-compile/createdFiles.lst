@@ -1,6 +1,11 @@
 com/example/model/User.class
+com/example/controller/UserProfileController.class
+com/example/controller/AdminController.class
+com/example/config/SecurityConfig.class
+com/example/model/User$UserRole.class
 com/example/repository/UserRepository.class
 com/example/controller/GlobalExceptionHandler.class
 com/example/controller/UserController.class
+com/example/controller/AuthController.class
 com/example/service/UserService.class
 com/example/UserManagementApplication.class

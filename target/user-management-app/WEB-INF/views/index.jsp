@@ -2,57 +2,43 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
-    <title>3-Tier User Management</title>
+    <title>User Management System</title>
     <style>
-        body { font-family: Arial; margin: 40px; background: #f9f9f9; }
-        h1 { color: #333; }
-        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
-        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
-        th { background-color: #4CAF50; color: white; }
-        tr:nth-child(even) { background-color: #f2f2f2; }
-        input, button { padding: 10px; margin: 5px; }
-        button { background: #4CAF50; color: white; border: none; cursor: pointer; }
-        a { color: red; text-decoration: none; }
-        a:hover { text-decoration: underline; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; display: flex; justify-content: center; align-items: center; }
+        .home-container { background: white; padding: 60px 40px; border-radius: 10px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); text-align: center; max-width: 500px; }
+        h1 { color: #333; font-size: 36px; margin-bottom: 20px; }
+        p { color: #666; font-size: 18px; margin-bottom: 30px; line-height: 1.6; }
+        .features { text-align: left; margin: 30px 0; padding: 20px; background: #f9f9f9; border-radius: 5px; }
+        .features li { list-style: none; padding: 8px 0; color: #555; }
+        .features li:before { content: "✓ "; color: #27ae60; font-weight: bold; margin-right: 10px; }
+        .buttons { display: flex; gap: 15px; margin-top: 40px; }
+        a { flex: 1; padding: 15px; text-decoration: none; border-radius: 5px; font-weight: 600; font-size: 16px; transition: background 0.3s; border: none; cursor: pointer; }
+        .btn-login { background: #667eea; color: white; }
+        .btn-login:hover { background: #5568d3; }
+        .btn-register { background: #27ae60; color: white; }
+        .btn-register:hover { background: #229954; }
     </style>
 </head>
-
 <body>
-    <h1>User Management - 3 Tier App</h1>
+    <div class="home-container">
+        <h1>User Management System</h1>
+        <p>Welcome to our secure and efficient user management platform</p>
 
-    <c:if test="${not empty error}">
-        <div style="color: red; margin-bottom: 12px;">${error}</div>
-    </c:if>
+        <div class="features">
+            <ul>
+                <li>Admin and User role-based access</li>
+                <li>Secure password authentication</li>
+                <li>Persistent data storage</li>
+                <li>User profile management</li>
+                <li>Admin user management dashboard</li>
+            </ul>
+        </div>
 
-    <form action="/add" method="post">
-        <input type="text" name="name" placeholder="Enter name" required />
-        <input type="email" name="email" placeholder="Enter email" required />
-        <button type="submit">Add User</button>
-    </form>
-
-    <h2>All Users (${users.size()})</h2>
-    <c:choose>
-        <c:when test="${empty users}">
-            <p>No users added yet.</p>
-        </c:when>
-        <c:otherwise>
-            <table>
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Action</th>
-                </tr>
-                <c:forEach var="user" items="${users}">
-                    <tr>
-                        <td>${user.id}</td>
-                        <td>${user.name}</td>
-                        <td>${user.email}</td>
-                        <td><a href="/delete/${user.id}" onclick="return confirm('Delete this user?')">Delete</a></td>
-                    </tr>
-                </c:forEach>
-            </table>
-        </c:otherwise>
-    </c:choose>
+        <div class="buttons">
+            <a href="/login" class="btn-login">Login</a>
+            <a href="/register" class="btn-register">Register</a>
+        </div>
+    </div>
 </body>
 </html>
