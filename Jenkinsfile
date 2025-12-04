@@ -54,7 +54,7 @@ pipeline {
 
         stage('Deploy') {
             steps {
-                echo "Deploying application to port ${APP_PORT}..."
+                echo "🚀 Deploying application to port ${APP_PORT}..."
                 sh '''
                     # Create logs directory
                     mkdir -p logs
@@ -64,8 +64,10 @@ pipeline {
                                --server.port=${APP_PORT} \
                                > ${APP_LOG} 2>&1 &
                     
-                    echo "Process started, waiting for app initialization..."
-                    sleep 10
+                    APP_PID=$!
+                    echo "Process started with PID: $APP_PID"
+                    echo "Waiting for app initialization..."
+                    sleep 15
                 '''
             }
         }
@@ -74,20 +76,27 @@ pipeline {
             steps {
                 echo " Performing health check..."
                 sh '''
+                    # Wait additional time for app startup
+                    sleep 5
+                    
                     # Check if app is listening on the port
-                    for i in {1..10}; do
+                    i=1
+                    while [ $i -le 15 ]; do
                         if curl -f http://localhost:${APP_PORT}/login > /dev/null 2>&1; then
-                            echo " Application is healthy and responding"
+                            echo "✅ Application is healthy and responding"
                             curl -s http://localhost:${APP_PORT}/login | grep -q "login" && \
-                            echo " Login page loaded successfully" || \
-                            echo " Login page might have issues"
+                            echo "✅ Login page loaded successfully" || \
+                            echo "⚠️ Login page might have issues"
                             exit 0
                         fi
-                        echo "Attempt $i/10: Waiting for application to start..."
-                        sleep 1
+                        echo "Attempt $i/15: Waiting for application to start..."
+                        sleep 2
+                        i=$((i+1))
                     done
                     
-                    echo " Application health check failed"
+                    echo "❌ Application health check failed"
+                    echo "Debug: Checking logs..."
+                    tail -50 ${APP_LOG}
                     exit 1
                 '''
             }
