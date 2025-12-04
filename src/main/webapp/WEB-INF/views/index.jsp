@@ -22,19 +22,8 @@
 </head>
 <body>
     <div class="home-container">
-        <h1>User Management System</h1>
-        <p>Welcome to our secure and efficient user management platform</p>
-
-        <div class="features">
-            <ul>
-                <li>Admin and User role-based access</li>
-                <li>Secure password authentication</li>
-                <li>Persistent data storage</li>
-                <li>User profile management</li>
-                <li>Admin user management dashboard</li>
-            </ul>
-        </div>
-
+        <h1>Empoyee Portal<h1>
+        <p>Welcome!</p>
         <div class="buttons">
             <a href="/login" class="btn-login">Login</a>
             <a href="/register" class="btn-register">Register</a>

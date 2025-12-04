@@ -2,6 +2,7 @@ package com.example.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "users")
@@ -26,6 +27,19 @@ public class User {
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
+    // HR specific fields
+    private LocalDate joiningDate;
+    private String workLocation;
+    private String domain;
+    private String department;
+    private String designation;
+    private String phone;
+    private String managerName;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private EmploymentStatus status = EmploymentStatus.ACTIVE;
+
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
@@ -38,6 +52,10 @@ public class User {
         this.email = email;
         this.password = password;
         this.role = role;
+    }
+
+    public enum EmploymentStatus {
+        ACTIVE, INACTIVE, TERMINATED
     }
 
     public Long getId() { return id; }
@@ -57,6 +75,30 @@ public class User {
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+
+    public LocalDate getJoiningDate() { return joiningDate; }
+    public void setJoiningDate(LocalDate joiningDate) { this.joiningDate = joiningDate; }
+
+    public String getWorkLocation() { return workLocation; }
+    public void setWorkLocation(String workLocation) { this.workLocation = workLocation; }
+
+    public String getDomain() { return domain; }
+    public void setDomain(String domain) { this.domain = domain; }
+
+    public String getDepartment() { return department; }
+    public void setDepartment(String department) { this.department = department; }
+
+    public String getDesignation() { return designation; }
+    public void setDesignation(String designation) { this.designation = designation; }
+
+    public String getPhone() { return phone; }
+    public void setPhone(String phone) { this.phone = phone; }
+
+    public String getManagerName() { return managerName; }
+    public void setManagerName(String managerName) { this.managerName = managerName; }
+
+    public EmploymentStatus getStatus() { return status; }
+    public void setStatus(EmploymentStatus status) { this.status = status; }
 
     public enum UserRole {
         ADMIN, USER

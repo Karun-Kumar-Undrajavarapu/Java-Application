@@ -1,4 +1,4 @@
-# 🔐 LOGIN CREDENTIALS
+#  LOGIN CREDENTIALS
 
 ## Default Test Accounts (Auto-created on first run)
 
@@ -20,7 +20,7 @@ Access:   User Dashboard - Edit own profile
 
 ---
 
-## 🌐 Access Points
+## Access Points
 
 **Home Page**: http://localhost:8084/
 **Login**: http://localhost:8084/login
@@ -28,7 +28,7 @@ Access:   User Dashboard - Edit own profile
 
 ---
 
-## 👨‍💼 Admin Dashboard Features (admin@localhost.com)
+## Admin Dashboard Features (admin@localhost.com)
 
 After logging in with admin credentials:
 
@@ -41,7 +41,7 @@ After logging in with admin credentials:
 
 ---
 
-## 👤 User Dashboard Features (user@localhost.com)
+## User Dashboard Features (user@localhost.com)
 
 After logging in with user credentials:
 
@@ -55,7 +55,7 @@ After logging in with user credentials:
 
 ---
 
-## 📝 Create Additional Accounts
+## Create Additional Accounts
 
 1. Go to http://localhost:8084/register
 2. Enter **Name**, **Email**, **Password** (min 6 characters)
@@ -65,17 +65,17 @@ After logging in with user credentials:
 
 ---
 
-## 🔒 Security Notes
+## Security Notes
 
-- ✅ Passwords are hashed with BCrypt (cannot be reversed)
-- ✅ Minimum 6 characters required
-- ✅ Email must be unique
-- ✅ Sessions expire on logout
-- ✅ All data stored in H2 database
+- Passwords are hashed with BCrypt (cannot be reversed)
+- Minimum 6 characters required
+- Email must be unique
+- Sessions expire on logout
+- All data stored in H2 database
 
 ---
 
-## 🧪 Quick Test Commands
+##  Quick Test Commands
 
 **Login as Admin:**
 ```bash
@@ -101,4 +101,4 @@ curl -X POST http://localhost:8084/register \
 
 **Last Updated**: December 4, 2025
 **Application**: User Management System v2.0
-**Status**: ✅ Ready to Use
+**Status**:  Ready to Use

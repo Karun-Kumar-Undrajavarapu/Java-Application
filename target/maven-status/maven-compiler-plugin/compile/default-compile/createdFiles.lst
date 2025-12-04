@@ -1,3 +1,4 @@
+com/example/model/User$EmploymentStatus.class
 com/example/controller/UserProfileController.class
 com/example/model/User$UserRole.class
 com/example/repository/UserRepository.class

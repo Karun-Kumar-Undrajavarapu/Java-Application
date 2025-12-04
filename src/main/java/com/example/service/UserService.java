@@ -7,6 +7,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
+import java.time.LocalDate;
 
 @Service
 public class UserService {
@@ -41,6 +42,7 @@ public class UserService {
             throw new IllegalArgumentException("Email already registered");
 
         User user = new User(name.trim(), email.trim(), passwordEncoder.encode(password), User.UserRole.USER);
+        // default some HR fields can be null; createdAt is set by entity
         return userRepository.save(user);
     }
 
@@ -59,14 +61,44 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
+    // Simple update used by controllers that only change name/email
     public User updateUser(Long id, String name, String email) {
         User user = userRepository.findById(id)
             .orElseThrow(() -> new IllegalArgumentException("User not found"));
-        
+
         if (name != null && !name.isEmpty()) user.setName(name.trim());
         if (email != null && !email.isEmpty()) user.setEmail(email.trim());
-        
+
         return userRepository.save(user);
+    }
+
+    // Full update that allows editing HR fields
+    public User updateUser(Long id, String name, String email, LocalDate joiningDate,
+                           String workLocation, String domain, String department,
+                           String designation, String phone, String managerName,
+                           User.EmploymentStatus status) {
+        User user = userRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        if (name != null && !name.isEmpty()) user.setName(name.trim());
+        if (email != null && !email.isEmpty()) user.setEmail(email.trim());
+        if (joiningDate != null) user.setJoiningDate(joiningDate);
+        if (workLocation != null) user.setWorkLocation(workLocation.trim());
+        if (domain != null) user.setDomain(domain.trim());
+        if (department != null) user.setDepartment(department.trim());
+        if (designation != null) user.setDesignation(designation.trim());
+        if (phone != null) user.setPhone(phone.trim());
+        if (managerName != null) user.setManagerName(managerName.trim());
+        if (status != null) user.setStatus(status);
+
+        return userRepository.save(user);
+    }
+
+    public void setRole(Long id, User.UserRole role) {
+        User user = userRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("User not found"));
+        user.setRole(role);
+        userRepository.save(user);
     }
 }
 

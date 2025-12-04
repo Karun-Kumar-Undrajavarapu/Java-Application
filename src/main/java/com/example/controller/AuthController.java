@@ -19,6 +19,11 @@ public class AuthController {
         return "login";
     }
 
+    @GetMapping("/admin/login")
+    public String adminLoginPage() {
+        return "admin-login";
+    }
+
     @GetMapping("/register")
     public String registerPage() {
         return "register";
@@ -54,6 +59,25 @@ public class AuthController {
         } catch (IllegalArgumentException e) {
             model.addAttribute("error", e.getMessage());
             return "login";
+        }
+    }
+
+    @PostMapping("/admin/perform-login")
+    public String performAdminLogin(@RequestParam String email, @RequestParam String password,
+                                    HttpSession session, Model model) {
+        try {
+            User user = userService.authenticateUser(email, password);
+            if (user.getRole() != User.UserRole.ADMIN) {
+                model.addAttribute("error", "Not an admin user");
+                return "admin-login";
+            }
+            session.setAttribute("user", user);
+            session.setAttribute("userId", user.getId());
+            session.setAttribute("userRole", user.getRole());
+            return "redirect:/admin/dashboard";
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("error", e.getMessage());
+            return "admin-login";
         }
     }
 
