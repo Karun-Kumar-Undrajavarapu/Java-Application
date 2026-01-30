@@ -9,8 +9,8 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 public class UserManagementApplication extends SpringBootServletInitializer {
 
     @Override
-    protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
-        return builder.sources(UserManagementApplication.class);
+    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+        return application.sources(UserManagementApplication.class);
     }
 
     public static void main(String[] args) {
